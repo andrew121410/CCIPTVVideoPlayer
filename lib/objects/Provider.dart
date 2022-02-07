@@ -1,29 +1,28 @@
 import 'dart:core';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:m3u/m3u.dart';
-import 'package:testingproject/managers/ProvidersManager.dart';
-import 'package:testingproject/objects/ProviderDetails.dart';
+import 'package:cc_iptv_video_player/managers/ProvidersManager.dart';
+import 'package:cc_iptv_video_player/objects/ProviderDetails.dart';
 
 class Provider {
-  ProviderDetails providerDetails;
-  List<M3uGenericEntry>? categoriesCom;
+  ProviderDetails _providerDetails;
+  List<M3uGenericEntry>? _categoriesCom;
 
-  Provider(this.providerDetails);
+  Provider(this._providerDetails);
 
   void tryToResolveM3U() async {
-    this.categoriesCom = await ProvidersManager.getM3UFromURL(providerDetails);
+    this._categoriesCom = await ProvidersManager.getM3UFromURL(_providerDetails);
   }
 
   List<Widget> createWidgets(BuildContext context) {
     List<Widget> wid = [];
 
-    if (this.categoriesCom == null) {
+    if (this._categoriesCom == null) {
       return wid;
     }
 
-    this.categoriesCom!.forEach((element) {
+    this._categoriesCom!.forEach((element) {
       wid.add(Row(
         children: [
           SizedBox(

@@ -1,8 +1,7 @@
+import 'package:cc_iptv_video_player/managers/ProviderDetailsManager.dart';
+import 'package:cc_iptv_video_player/objects/ProviderDetails.dart';
+import 'package:cc_iptv_video_player/screens/AddProviderMenu.dart';
 import 'package:flutter/material.dart';
-import 'package:testingproject/main.dart';
-import 'package:testingproject/managers/ProviderDetailsManager.dart';
-import 'package:testingproject/objects/ProviderDetails.dart';
-import 'package:testingproject/screens/AddProviderMenu.dart';
 
 class ProvidersEditMenu extends StatefulWidget {
   @override
@@ -10,11 +9,10 @@ class ProvidersEditMenu extends StatefulWidget {
 }
 
 class ProvidersEditMenuPage extends State<ProvidersEditMenu> {
-  ProviderDetailsManager _providersManager = MyTestingApplicationMenuPage.instance!.providerDetailsManager;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white70,
       appBar: AppBar(
         title: Text("Provider Manager"),
       ),
@@ -25,86 +23,102 @@ class ProvidersEditMenuPage extends State<ProvidersEditMenu> {
               MaterialPageRoute(builder: (context) => AddProviderMenu([])));
           if (providerDetails != null) {
             setState(() {
-              _providersManager.addProvider(providerDetails);
+              ProviderDetailsManager.addProvider(providerDetails);
+              ProviderDetailsManager.saveAll();
             }); //Update
-            _providersManager.saveAll();
           }
         },
       ),
       body: Container(
-          child: _providersManager.providers.isEmpty
+          child: ProviderDetailsManager.providers.isEmpty
               ? Center(
                   child: Text("You don't have any providers."),
                 )
               : SingleChildScrollView(
-                  child: Column(
-                    children: ProvidersMenuUtils().createProvidersWidgets(
-                        context, true, () => {setState(() {})}),
-                  ),
+                  child: Column(children: [
+                    ProvidersMenuUtils().createProviderWidget(
+                        context, true, false, () => {setState(() {})}),
+                  ]),
                 )),
     );
   }
 }
 
 class ProvidersMenuUtils {
-  ProviderDetailsManager _providersManager = MyTestingApplicationMenuPage.instance!.providerDetailsManager;
+  Widget _theSizedBox(ProviderDetails providerDetails) {
+    return SizedBox(
+      height: 40,
+      width: 200,
+      child: ElevatedButton(
+        onPressed: () {},
+        child: Text(providerDetails.prefix),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+        ),
+      ),
+    );
+  }
 
-  List<Widget> createProvidersWidgets(
-      BuildContext context, bool editMode, Function setTheState) {
-    List<Widget> widgets = [];
+  ListView createProviderWidget(
+      BuildContext context, bool editMode, bool center, Function setTheState) {
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: ProviderDetailsManager.providers.keys.length,
+        itemBuilder: (BuildContext context, int index) {
+          ProviderDetails providerDetails =
+              ProviderDetailsManager.providers.values.elementAt(index);
 
-    if (_providersManager.providers.isNotEmpty) {
-      for (var value in this._providersManager.providers.values) {
-        widgets.add(Row(
-          children: [
-            SizedBox(
-              height: 40,
-              width: 200,
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Text(value.prefix),
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
-                ),
-              ),
+          return Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: Row(
+              children: [
+                center
+                    ? Expanded(
+                        child: Center(
+                        child: _theSizedBox(providerDetails),
+                      ))
+                    : _theSizedBox(providerDetails),
+
+                if (editMode) SizedBox(width: 20),
+                //Edit button
+                if (editMode)
+                  IconButton(
+                      onPressed: () async {
+                        ProviderDetails? providerDetailsPush =
+                            await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddProviderMenu(
+                                        createEditTextControllers(
+                                            providerDetails))));
+                        if (providerDetailsPush != null) {
+                          ProviderDetailsManager.removeProvider(
+                              providerDetailsPush.prefix);
+                          ProviderDetailsManager.addProvider(
+                              providerDetailsPush);
+                          ProviderDetailsManager.saveAll();
+                          setTheState();
+                        }
+                      },
+                      icon: Icon(Icons.edit),
+                      color: Colors.black),
+                if (editMode) SizedBox(width: 20), // give it width
+                //Delete button
+                if (editMode)
+                  IconButton(
+                      onPressed: () async {
+                        ProviderDetailsManager.removeProvider(
+                            providerDetails.prefix);
+                        ProviderDetailsManager.saveAll();
+                        setTheState();
+                      },
+                      icon: Icon(Icons.delete),
+                      color: Colors.red),
+              ],
             ),
-            if (editMode) SizedBox(width: 20),
-            //Edit button
-            if (editMode)
-              IconButton(
-                  onPressed: () async {
-                    ProviderDetails? providerDetails = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AddProviderMenu(
-                                createEditTextControllers(value))));
-                    if (providerDetails != null) {
-                      _providersManager.removeProvider(value.prefix);
-                      _providersManager.addProvider(providerDetails);
-                      setTheState();
-                      _providersManager.saveAll();
-                    }
-                  },
-                  icon: Icon(Icons.edit),
-                  color: Colors.black),
-            if (editMode) SizedBox(width: 20), // give it width
-            //Delete button
-            if (editMode)
-              IconButton(
-                  onPressed: () {
-                    _providersManager.removeProvider(value.prefix);
-                    setTheState();
-                    _providersManager.saveAll();
-                  },
-                  icon: Icon(Icons.delete),
-                  color: Colors.red),
-          ],
-        ));
-        widgets.add(Padding(padding: EdgeInsets.only(bottom: 10)));
-      }
-    }
-    return widgets;
+          );
+          // widgets.add(Padding(padding: EdgeInsets.only(bottom: 10)));
+        });
   }
 
   List<TextEditingController> createEditTextControllers(

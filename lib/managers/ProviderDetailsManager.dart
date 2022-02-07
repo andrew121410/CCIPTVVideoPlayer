@@ -1,25 +1,29 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:cc_iptv_video_player/objects/ProviderDetails.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testingproject/objects/ProviderDetails.dart';
 
 class ProviderDetailsManager {
-  HashMap<String, ProviderDetails> providers =
+  static HashMap<String, ProviderDetails> providers =
       HashMap<String, ProviderDetails>();
+  static bool dataLoaded = false;
 
-  ProviderDetails addProvider(ProviderDetails providerDetails) {
-    return this
-        .providers
-        .putIfAbsent(providerDetails.prefix.toLowerCase(), () => providerDetails);
+  static void addProvider(ProviderDetails providerDetails) {
+    providers.putIfAbsent(
+        providerDetails.prefix.toLowerCase(), () => providerDetails);
   }
 
-  ProviderDetails? getProviderByPrefix(String prefix) {
-    return this.providers[prefix.toLowerCase()];
+  static void removeProvider(String prefix) {
+    providers.remove(prefix.toLowerCase());
   }
 
-  ProviderDetails? getProviderByURL(String url) {
-    for (var value in this.providers.values) {
+  static ProviderDetails? getProviderByPrefix(String prefix) {
+    return providers[prefix.toLowerCase()];
+  }
+
+  static ProviderDetails? getProviderByURL(String url) {
+    for (var value in providers.values) {
       if (value.url == url.toLowerCase()) {
         return value;
       }
@@ -27,37 +31,38 @@ class ProviderDetailsManager {
     return null;
   }
 
-  void removeProvider(String prefix) {
-    this.providers.remove(prefix.toLowerCase());
-  }
-
-  Future<bool> loadAll() async {
+  static Future<bool> loadAll() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     List<String>? rawProviders = preferences.getStringList("providers");
-    if (rawProviders == null || rawProviders.isEmpty) return false;
+    if (rawProviders == null || rawProviders.isEmpty) {
+      dataLoaded = true;
+      return false;
+    }
     for (var value in rawProviders) {
       ProviderDetails providerDetails =
           ProviderDetails.fromJson(jsonDecode(value));
-      this.providers.putIfAbsent(providerDetails.prefix.toLowerCase(), () => providerDetails);
+      providers.putIfAbsent(
+          providerDetails.prefix.toLowerCase(), () => providerDetails);
     }
     print("DONE LOADING UP PROVIDERS!!!");
+    dataLoaded = true;
     return true;
   }
 
-  void saveAll() async {
+  static Future<void> saveAll() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     List<String> jsonStrings = [];
-    for (var value in this.providers.values) {
+    for (var value in providers.values) {
       jsonStrings.add(jsonEncode(value.toJson()));
     }
-    if (jsonStrings.isEmpty) return;
     preferences.setStringList("providers", jsonStrings);
     print("SAVED ALL PROVIDERS!!");
+    return Future.value("Saved all providers!");
   }
 
   void removeAll() async {
     print("Removing all providers and deleting from the shared preferences.");
-    this.providers.removeWhere((key, value) => true);
+    providers.removeWhere((key, value) => true);
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.clear();
   }

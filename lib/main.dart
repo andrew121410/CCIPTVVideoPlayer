@@ -4,29 +4,27 @@ import 'managers/ProviderDetailsManager.dart';
 import 'screens/ChooseProviderMenu.dart';
 
 void main() {
-  runApp(MyTestingApplicationMenu());
+  runApp(CCIPTVVideoPlayerMenu());
 }
 
-class MyTestingApplicationMenu extends StatefulWidget {
+class CCIPTVVideoPlayerMenu extends StatefulWidget {
+
   @override
-  MyTestingApplicationMenuPage createState() => MyTestingApplicationMenuPage();
+  CCIPTVVideoPlayerMenuPage createState() {
+    return CCIPTVVideoPlayerMenuPage();
+  }
 }
 
-class MyTestingApplicationMenuPage extends State<MyTestingApplicationMenu> {
-  static MyTestingApplicationMenuPage? instance;
+class CCIPTVVideoPlayerMenuPage extends State<CCIPTVVideoPlayerMenu> {
+  static CCIPTVVideoPlayerMenuPage? instance;
+  static ProviderDetailsManager providerDetailsManager = ProviderDetailsManager();
 
-  ProviderDetailsManager providerDetailsManager = ProviderDetailsManager();
-
-  MyTestingApplicationMenuPage() {
+  CCIPTVVideoPlayerMenuPage() {
     instance = this;
   }
 
   @override
   void initState() {
-    Future.delayed(Duration(milliseconds: 30), () async {
-      print("Loading up all the providers (initState)");
-      providerDetailsManager.loadAll();
-    });
     super.initState();
   }
 
@@ -35,7 +33,7 @@ class MyTestingApplicationMenuPage extends State<MyTestingApplicationMenu> {
     return MaterialApp(
       home: ChooseProviderMenu(),
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
       ),
     );
   }

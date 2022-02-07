@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:testingproject/objects/ProviderDetails.dart';
+import 'package:cc_iptv_video_player/objects/ProviderDetails.dart';
 
 class AddProviderMenu extends StatefulWidget {
   List<TextEditingController> _textEditingControllers;

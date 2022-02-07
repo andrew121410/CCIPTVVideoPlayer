@@ -2,8 +2,8 @@ import 'dart:collection';
 
 import 'package:m3u/m3u.dart';
 import 'package:http/http.dart' as http;
-import 'package:testingproject/objects/Provider.dart';
-import 'package:testingproject/objects/ProviderDetails.dart';
+import 'package:cc_iptv_video_player/objects/Provider.dart';
+import 'package:cc_iptv_video_player/objects/ProviderDetails.dart';
 
 class ProvidersManager {
   static Map<String, Provider> providers = HashMap<String, Provider>();
