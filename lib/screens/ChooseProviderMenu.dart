@@ -1,6 +1,6 @@
-import 'package:cc_iptv_video_player/main.dart';
-import 'package:cc_iptv_video_player/managers/ProviderDetailsManager.dart';
+import 'package:cc_iptv_video_player/managers/ProviderDetailsStorageManager.dart';
 import 'package:cc_iptv_video_player/screens/ProvidersEditMenu.dart';
+import 'package:cc_iptv_video_player/utils/ProvidersMenuUtils.dart';
 import 'package:flutter/material.dart';
 
 class ChooseProviderMenu extends StatefulWidget {
@@ -9,10 +9,6 @@ class ChooseProviderMenu extends StatefulWidget {
 }
 
 class ChooseProviderMenuPage extends State<ChooseProviderMenu> {
-  ProviderDetailsManager _providerDetailsManager =
-      CCIPTVVideoPlayerMenuPage.providerDetailsManager;
-  ProvidersMenuUtils _providersMenuUtils = ProvidersMenuUtils();
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
@@ -43,13 +39,12 @@ class ChooseProviderMenuPage extends State<ChooseProviderMenu> {
                   child: Icon(Icons.settings),
                 ),
                 body: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _providersMenuUtils.createProviderWidget(context, false, true, () {
-                        setState(() {});
-                      }),
-                    ]
-                  ),
+                  child: Column(children: [
+                    ProvidersMenuUtils.createProvidersWidget(
+                        context, false, true, () {
+                      setState(() {});
+                    }),
+                  ]),
                 ),
               );
             }
@@ -59,8 +54,9 @@ class ChooseProviderMenuPage extends State<ChooseProviderMenu> {
   }
 
   Future<String> loadUpDataAsync() async {
-    if (!ProviderDetailsManager.dataLoaded) {
-      await ProviderDetailsManager.loadAll();
+    //This will load up all the providers from storage
+    if (!ProviderDetailsStorageManager.dataLoaded) {
+      await ProviderDetailsStorageManager.loadAll();
       print("Loading up data in (LoadUpData) -> ChooseProviderMenu.dart");
     }
     return Future.value("Data has loaded!");

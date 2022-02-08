@@ -1,9 +1,10 @@
+import 'package:cc_iptv_video_player/drawer/NavigationDrawerMenu.dart';
 import 'package:cc_iptv_video_player/objects/ProviderDetails.dart';
 import 'package:cc_iptv_video_player/utils/XStreamUtils.dart';
-import 'package:cc_iptv_video_player/xstreamdata/XCategory.dart';
 import 'package:flutter/material.dart';
 
 import '../../../objects/Provider.dart';
+import '../../../xstreamobjects/XCategory.dart';
 
 class ProviderLiveCategoriesMenu extends StatefulWidget {
   late ProviderDetails _providerDetails;
@@ -42,6 +43,7 @@ class ProviderLiveCategoriesMenuPage extends State<ProviderLiveCategoriesMenu> {
               return Text('Error: ${snapshot.error}');
             else {
               return Scaffold(
+                drawer: NavigationDrawerMenu(nameOfPage: "Live Categories!", listView: _providerDetails.getProvider().createDrawerListView(context, liveXCategories)),
                 backgroundColor: Colors.white70,
                 appBar: AppBar(
                   title: Text("Live Categories!"),
@@ -49,7 +51,7 @@ class ProviderLiveCategoriesMenuPage extends State<ProviderLiveCategoriesMenu> {
                 body: SingleChildScrollView(
                   child: Column(
                       children: [
-                        _providerDetails.getProvider().createWidgetsCategories(context, liveXCategories),
+                        // _providerDetails.getProvider().createWidgetsCategories(context, liveXCategories),
                       ]
                   ),
                 ),

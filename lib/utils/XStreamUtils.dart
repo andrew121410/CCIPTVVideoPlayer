@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:cc_iptv_video_player/objects/Provider.dart';
 import 'package:cc_iptv_video_player/objects/ProviderDetails.dart';
-import 'package:cc_iptv_video_player/xstreamdata/XCategory.dart';
 import 'package:http/http.dart' as http;
+
+import '../xstreamobjects/XCategory.dart';
 
 class XStreamUtils {
   static Future<List<XCategory>> getLiveCategories(Provider provider) async {

@@ -1,8 +1,10 @@
 import 'dart:core';
 
+import 'package:cc_iptv_video_player/drawer/DrawerItem.dart';
 import 'package:cc_iptv_video_player/objects/ProviderDetails.dart';
-import 'package:cc_iptv_video_player/xstreamdata/XCategory.dart';
 import 'package:flutter/material.dart';
+
+import '../xstreamobjects/XCategory.dart';
 
 class Provider {
   ProviderDetails _providerDetails;
@@ -18,9 +20,11 @@ class Provider {
           XCategory element = xCategories[index];
           return Padding(
             padding: EdgeInsets.only(bottom: 10),
-            child: Row(
-              children: [
-                SizedBox(
+            child: Container(
+              color: Colors.green,
+              child: Row(
+                children: [
+                  SizedBox(
                   height: 40,
                   width: 200,
                   child: ElevatedButton(
@@ -31,11 +35,26 @@ class Provider {
                           MaterialStateProperty.all<Color>(Colors.blue),
                     ),
                   ),
-                ),
-              ],
+                    ),
+                ],
+              ),
             ),
           );
         });
+  }
+
+  //Used in/for NavigationDrawerMenu
+  ListView createDrawerListView(
+      BuildContext context, List<XCategory> xCategories) {
+    return ListView.builder(
+      controller: ScrollController(),
+        shrinkWrap: true,
+        itemCount: xCategories.length,
+        itemBuilder: (BuildContext context, int index) {
+          XCategory element = xCategories[index];
+          return DrawerItem(name: element.categoryName, onPressed: () {});
+        }
+    );
   }
 
   ProviderDetails get getProviderDetails {
