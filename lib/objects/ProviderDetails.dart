@@ -1,4 +1,7 @@
+import 'package:cc_iptv_video_player/objects/Provider.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import '../utils/ProvidersUtils.dart';
 
 part 'ProviderDetails.g.dart';
 
@@ -11,6 +14,10 @@ class ProviderDetails {
   String password;
 
   ProviderDetails(this.prefix, this.url, this.username, this.password);
+
+  Provider getProvider() {
+    return ProvidersUtils.providers.putIfAbsent(this.prefix.toLowerCase(), () => Provider(this));
+  }
 
   factory ProviderDetails.fromJson(Map<String, dynamic> data) => _$ProviderDetailsFromJson(data);
   Map<String, dynamic> toJson () => _$ProviderDetailsToJson(this);

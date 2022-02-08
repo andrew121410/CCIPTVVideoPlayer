@@ -1,6 +1,7 @@
 import 'package:cc_iptv_video_player/managers/ProviderDetailsManager.dart';
 import 'package:cc_iptv_video_player/objects/ProviderDetails.dart';
 import 'package:cc_iptv_video_player/screens/AddProviderMenu.dart';
+import 'package:cc_iptv_video_player/screens/provider/live/ProviderLiveCategoriesMenu.dart';
 import 'package:flutter/material.dart';
 
 class ProvidersEditMenu extends StatefulWidget {
@@ -45,12 +46,14 @@ class ProvidersEditMenuPage extends State<ProvidersEditMenu> {
 }
 
 class ProvidersMenuUtils {
-  Widget _theSizedBox(ProviderDetails providerDetails) {
+  Widget _theSizedBox(BuildContext context, ProviderDetails providerDetails) {
     return SizedBox(
       height: 40,
       width: 200,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ProviderLiveCategoriesMenu(providerDetails)));
+        },
         child: Text(providerDetails.prefix),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
@@ -75,9 +78,9 @@ class ProvidersMenuUtils {
                 center
                     ? Expanded(
                         child: Center(
-                        child: _theSizedBox(providerDetails),
+                        child: _theSizedBox(context, providerDetails),
                       ))
-                    : _theSizedBox(providerDetails),
+                    : _theSizedBox(context, providerDetails),
 
                 if (editMode) SizedBox(width: 20),
                 //Edit button
