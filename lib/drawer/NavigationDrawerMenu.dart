@@ -19,11 +19,8 @@ class NavigationDrawerMenuPage extends State<NavigationDrawerMenu> {
   NavigationDrawerMenuPage({required this.nameOfPage, required this.listView});
 
   Widget headerWidget() {
-    return Row(
-      children: [
-        const SizedBox(width: 20,),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text('CCIPTVVideoPlayer',
                 style: TextStyle(fontSize: 14, color: Colors.white)),
@@ -32,7 +29,7 @@ class NavigationDrawerMenuPage extends State<NavigationDrawerMenu> {
             SizedBox(height: 20),
             SizedBox(
               height: 40,
-              width: 200,
+              width: 100,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseProviderMenu()));
@@ -44,9 +41,7 @@ class NavigationDrawerMenuPage extends State<NavigationDrawerMenu> {
               ),
             ),
           ],
-        )
-      ],
-    );
+        );
   }
 
   @override
@@ -61,9 +56,9 @@ class NavigationDrawerMenuPage extends State<NavigationDrawerMenu> {
             child: Column(
               children: [
                 headerWidget(),
-                const SizedBox(height: 40),
+                const SizedBox(height: 20),
                 const Divider(thickness: 1, height: 10, color: Colors.grey),
-                const SizedBox(height: 40),
+                const SizedBox(height: 20),
                 listView,
               ],
             ),

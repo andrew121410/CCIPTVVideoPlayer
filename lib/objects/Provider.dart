@@ -5,56 +5,50 @@ import 'package:cc_iptv_video_player/objects/ProviderDetails.dart';
 import 'package:flutter/material.dart';
 
 import '../xstreamobjects/XCategory.dart';
+import '../xstreamobjects/XChannel.dart';
 
 class Provider {
   ProviderDetails _providerDetails;
 
   Provider(this._providerDetails);
 
-  ListView createWidgetsCategories(
-      BuildContext context, List<XCategory> xCategories) {
+  //Used in/for NavigationDrawerMenu
+  ListView createDrawerListView(BuildContext context,
+      List<XCategory> xCategories, Function(XCategory) onPressed) {
     return ListView.builder(
+        controller: ScrollController(),
         shrinkWrap: true,
         itemCount: xCategories.length,
         itemBuilder: (BuildContext context, int index) {
           XCategory element = xCategories[index];
-          return Padding(
-            padding: EdgeInsets.only(bottom: 10),
-            child: Container(
-              color: Colors.green,
-              child: Row(
-                children: [
-                  SizedBox(
-                  height: 40,
-                  width: 200,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text(element.categoryName),
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
-                    ),
-                  ),
-                    ),
-                ],
-              ),
-            ),
-          );
+          return DrawerItem(
+              name: element.categoryName,
+              onPressed: () {
+                onPressed(element);
+              });
         });
   }
 
-  //Used in/for NavigationDrawerMenu
-  ListView createDrawerListView(
-      BuildContext context, List<XCategory> xCategories) {
-    return ListView.builder(
-      controller: ScrollController(),
+  GridView createChannelsListView(
+      BuildContext context, List<XChannel> xChannels) {
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+          childAspectRatio: 7, mainAxisSpacing: 8, crossAxisSpacing: 8,
+      ),
         shrinkWrap: true,
-        itemCount: xCategories.length,
+        itemCount: xChannels.length,
         itemBuilder: (BuildContext context, int index) {
-          XCategory element = xCategories[index];
-          return DrawerItem(name: element.categoryName, onPressed: () {});
-        }
-    );
+          XChannel xChannel = xChannels[index];
+
+          return ElevatedButton(
+            onPressed: () {},
+            child: Text(xChannel.name),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
+            ),
+          );
+        });
   }
 
   ProviderDetails get getProviderDetails {

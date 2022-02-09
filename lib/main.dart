@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'managers/ProviderDetailsStorageManager.dart';
 import 'screens/ChooseProviderMenu.dart';
 
 void main() {
@@ -8,7 +7,6 @@ void main() {
 }
 
 class CCIPTVVideoPlayerMenu extends StatefulWidget {
-
   @override
   CCIPTVVideoPlayerMenuPage createState() {
     return CCIPTVVideoPlayerMenuPage();
@@ -17,7 +15,6 @@ class CCIPTVVideoPlayerMenu extends StatefulWidget {
 
 class CCIPTVVideoPlayerMenuPage extends State<CCIPTVVideoPlayerMenu> {
   static CCIPTVVideoPlayerMenuPage? instance;
-  static ProviderDetailsStorageManager providerDetailsManager = ProviderDetailsStorageManager();
 
   CCIPTVVideoPlayerMenuPage() {
     instance = this;

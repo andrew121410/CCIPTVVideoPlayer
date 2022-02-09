@@ -15,20 +15,15 @@ class DrawerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(bottom: 10),
-      child: Row(
-        children: [
-          SizedBox(
-            height: 40,
-            width: 200,
-            child: ElevatedButton(
-              onPressed: this.onPressed,
-              child: Text(this.name),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(this.color == null ? Colors.pink : this.color!),
-              ),
-            ),
+      child: SizedBox(
+        height: 35,
+        child: ElevatedButton(
+          onPressed: this.onPressed,
+          child: Text(this.name),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(this.color == null ? Colors.brown : this.color!),
           ),
-        ],
+        ),
       ),
     );
   }

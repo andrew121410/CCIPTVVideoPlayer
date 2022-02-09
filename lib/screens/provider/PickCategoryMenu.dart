@@ -1,9 +1,8 @@
+import 'package:cc_iptv_video_player/buttons/GradientButton.dart';
 import 'package:cc_iptv_video_player/objects/ProviderDetails.dart';
-import 'package:cc_iptv_video_player/screens/provider/live/ProviderLiveCategoriesMenu.dart';
 import 'package:flutter/material.dart';
 
-import '../../objects/Provider.dart';
-import '../../xstreamobjects/XCategory.dart';
+import 'live/ProviderLiveCategoriesMenu.dart';
 
 class PickCategoryMenu extends StatelessWidget {
 
@@ -13,56 +12,66 @@ class PickCategoryMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Pick A Category!")),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Colors.black45, Colors.purple])),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Pick A Category!"),
+          backgroundColor: Colors.white24),
+        backgroundColor: Colors.transparent,
+        body: Column(
           children: [
-            SizedBox(
-              height: 40,
-              width: 200,
-              child: ElevatedButton(
-                onPressed: () async {
-                  ProviderLiveCategoriesMenu providerLiveCatMenu = ProviderLiveCategoriesMenu(providerDetails: providerDetails);
-                  await providerLiveCatMenu.loadUpLiveXCategories();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => providerLiveCatMenu));
-                },
-                child: Text("Live"),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      Colors.teal),
+            Padding(padding: EdgeInsets.only(top: 100)),
+            Text(providerDetails.prefix, style: TextStyle(
+              color: Colors.yellowAccent,
+              fontWeight: FontWeight.bold,
+              fontSize: 25
+            ),),
+            Padding(padding: EdgeInsets.only(top: 200)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 75,
+                  width: 200,
+                  child: GradientButton(
+                    gradient: LinearGradient(colors: [Colors.cyan, Colors.indigo]),
+                    child: Text("Live"),
+                    onPressed: () async {
+                      ProviderLiveCategoriesMenu providerLiveCatMenu = ProviderLiveCategoriesMenu(providerDetails: providerDetails);
+                      await providerLiveCatMenu.loadUpLiveXCategories();
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => providerLiveCatMenu));
+                    },
+                  ),
                 ),
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 10),),
-            SizedBox(
-              height: 40,
-              width: 200,
-              child: ElevatedButton(
-                onPressed: null,
-                child: Text("Movies"),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      Colors.teal),
+                Padding(padding: EdgeInsets.only(left: 200),),
+                SizedBox(
+                  height: 75,
+                  width: 200,
+                  child: GradientButton(
+                    onPressed: () {},
+                    gradient: LinearGradient(colors: [Colors.orange, Colors.white30]),
+                    child: Text("Movies"),
+                  ),
                 ),
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 10),),
-            SizedBox(
-              height: 40,
-              width: 200,
-              child: ElevatedButton(
-                onPressed: null,
-                child: Text("Series"),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      Colors.teal),
+                Padding(padding: EdgeInsets.only(left: 200),),
+                SizedBox(
+                  height: 75,
+                  width: 200,
+                  child: GradientButton(
+                    onPressed: () {},
+                    gradient: LinearGradient(colors: [Colors.cyan, Colors.deepPurple]),
+                    child: Text("Series"),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+    ],
         ),
       ),
     );

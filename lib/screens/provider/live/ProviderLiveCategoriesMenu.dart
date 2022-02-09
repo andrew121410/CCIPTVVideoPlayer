@@ -1,6 +1,7 @@
 import 'package:cc_iptv_video_player/drawer/NavigationDrawerMenu.dart';
 import 'package:cc_iptv_video_player/objects/ProviderDetails.dart';
 import 'package:cc_iptv_video_player/utils/XStreamUtils.dart';
+import 'package:cc_iptv_video_player/xstreamobjects/XChannel.dart';
 import 'package:flutter/material.dart';
 
 import '../../../objects/Provider.dart';
@@ -14,12 +15,14 @@ class ProviderLiveCategoriesMenu extends StatefulWidget {
 
   @override
   ProviderLiveCategoriesMenuPage createState() =>
-      ProviderLiveCategoriesMenuPage(providerDetails: this.providerDetails, liveXCategories: this.liveXCategories);
+      ProviderLiveCategoriesMenuPage(
+          providerDetails: this.providerDetails,
+          liveXCategories: this.liveXCategories);
 
   Future<String> loadUpLiveXCategories() async {
     Provider provider = this.providerDetails.getProvider();
     List<XCategory> liveXCategories =
-    await XStreamUtils.getLiveCategories(provider);
+        await XStreamUtils.getLiveCategories(provider);
     this.liveXCategories = liveXCategories;
     return Future.value(
         "liveXCategories Loaded! (loadUpProvider) ProviderLiveCategoriesMenu/Page");
@@ -31,8 +34,11 @@ class ProviderLiveCategoriesMenuPage extends State<ProviderLiveCategoriesMenu> {
 
   ProviderDetails providerDetails;
   List<XCategory> liveXCategories;
+  List<XChannel>? liveXChannels;
+  XCategory? xCategorySelected;
 
-  ProviderLiveCategoriesMenuPage({required this.providerDetails, required this.liveXCategories});
+  ProviderLiveCategoriesMenuPage(
+      {required this.providerDetails, required this.liveXCategories});
 
   @override
   void initState() {
@@ -49,16 +55,30 @@ class ProviderLiveCategoriesMenuPage extends State<ProviderLiveCategoriesMenu> {
       key: this._scaffoldKey,
       drawer: NavigationDrawerMenu(
           nameOfPage: "Live Categories!",
-          listView: this.providerDetails.getProvider().createDrawerListView(context, liveXCategories)),
+          listView: this.providerDetails.getProvider().createDrawerListView(context, liveXCategories, (x) async {
+            //Ran when clicking a category
+            List<XChannel> xChannels = await XStreamUtils.getLiveCategoryChannels(providerDetails.getProvider(), x.categoryId);
+            setState(() {
+              this.xCategorySelected = x;
+              this.liveXChannels = xChannels;
+            });
+          })),
       backgroundColor: Colors.white70,
       appBar: AppBar(
-        title: Text("Live Categories!"),
+        title: Text("Live Channels!"),
       ),
-      body: SingleChildScrollView(
-        child: Column(children: [
-          // _providerDetails.getProvider().createWidgetsCategories(context, liveXCategories),
-        ]),
-      ),
+      body: this.liveXChannels == null
+          ? Text("Please select a category!")
+          : SingleChildScrollView(
+            child: Column(
+              children: [
+                Text(this.xCategorySelected!.categoryName, style: TextStyle(
+                  fontSize: 30,
+                ),),
+                this.providerDetails.getProvider().createChannelsListView(context, this.liveXChannels!),
+      ],
+            ),
+          ),
     );
   }
 }

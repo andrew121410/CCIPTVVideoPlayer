@@ -35,7 +35,7 @@ class ProviderDetailsStorageManager {
     return Future.value("Saved all providers!");
   }
 
-  void removeAll() async {
+  static Future<void> removeAll() async {
     print("Removing all providers and deleting from the shared preferences.");
     ProvidersUtils.providersDetailsMap.removeWhere((key, value) => true);
     SharedPreferences preferences = await SharedPreferences.getInstance();
