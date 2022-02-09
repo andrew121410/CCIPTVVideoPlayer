@@ -25,6 +25,7 @@ class ChooseProviderMenuPage extends State<ChooseProviderMenu> {
                 backgroundColor: Colors.white70,
                 appBar: AppBar(
                   title: Text("Providers"),
+                  automaticallyImplyLeading: false,
                 ),
                 floatingActionButton: FloatingActionButton(
                   onPressed: () => {

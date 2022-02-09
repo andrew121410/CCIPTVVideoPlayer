@@ -1,3 +1,4 @@
+import 'package:cc_iptv_video_player/screens/ChooseProviderMenu.dart';
 import 'package:flutter/material.dart';
 
 class NavigationDrawerMenu extends StatefulWidget {
@@ -33,7 +34,9 @@ class NavigationDrawerMenuPage extends State<NavigationDrawerMenu> {
               height: 40,
               width: 200,
               child: ElevatedButton(
-                onPressed: null,
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseProviderMenu()));
+                },
                 child: Text("Home"),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.lightBlue),

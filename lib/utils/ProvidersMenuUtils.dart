@@ -1,3 +1,4 @@
+import 'package:cc_iptv_video_player/screens/provider/PickCategoryMenu.dart';
 import 'package:cc_iptv_video_player/utils/ProvidersUtils.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class ProvidersMenuUtils {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      ProviderLiveCategoriesMenu(providerDetails)));
+                      PickCategoryMenu(providerDetails: providerDetails,)));
         },
         child: Text(providerDetails.prefix),
         style: ButtonStyle(

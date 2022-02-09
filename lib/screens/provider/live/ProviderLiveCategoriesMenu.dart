@@ -7,23 +7,32 @@ import '../../../objects/Provider.dart';
 import '../../../xstreamobjects/XCategory.dart';
 
 class ProviderLiveCategoriesMenu extends StatefulWidget {
-  late ProviderDetails _providerDetails;
+  ProviderDetails providerDetails;
+  List<XCategory> liveXCategories = [];
 
-  ProviderLiveCategoriesMenu(ProviderDetails providerDetails){
-    this._providerDetails = providerDetails;
-  }
+  ProviderLiveCategoriesMenu({required this.providerDetails});
 
   @override
-  ProviderLiveCategoriesMenuPage createState() => ProviderLiveCategoriesMenuPage(_providerDetails);
+  ProviderLiveCategoriesMenuPage createState() =>
+      ProviderLiveCategoriesMenuPage(providerDetails: this.providerDetails, liveXCategories: this.liveXCategories);
+
+  Future<String> loadUpLiveXCategories() async {
+    Provider provider = this.providerDetails.getProvider();
+    List<XCategory> liveXCategories =
+    await XStreamUtils.getLiveCategories(provider);
+    this.liveXCategories = liveXCategories;
+    return Future.value(
+        "liveXCategories Loaded! (loadUpProvider) ProviderLiveCategoriesMenu/Page");
+  }
 }
 
 class ProviderLiveCategoriesMenuPage extends State<ProviderLiveCategoriesMenu> {
-  late ProviderDetails _providerDetails;
-  List<XCategory> liveXCategories = [];
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  ProviderLiveCategoriesMenuPage(ProviderDetails providerDetails) {
-    this._providerDetails = providerDetails;
-  }
+  ProviderDetails providerDetails;
+  List<XCategory> liveXCategories;
+
+  ProviderLiveCategoriesMenuPage({required this.providerDetails, required this.liveXCategories});
 
   @override
   void initState() {
@@ -32,40 +41,24 @@ class ProviderLiveCategoriesMenuPage extends State<ProviderLiveCategoriesMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<String>(
-      future: loadUpProvider(),
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return Text("Loading Please Wait...");
-          default:
-            if (snapshot.hasError)
-              return Text('Error: ${snapshot.error}');
-            else {
-              return Scaffold(
-                drawer: NavigationDrawerMenu(nameOfPage: "Live Categories!", listView: _providerDetails.getProvider().createDrawerListView(context, liveXCategories)),
-                backgroundColor: Colors.white70,
-                appBar: AppBar(
-                  title: Text("Live Categories!"),
-                ),
-                body: SingleChildScrollView(
-                  child: Column(
-                      children: [
-                        // _providerDetails.getProvider().createWidgetsCategories(context, liveXCategories),
-                      ]
-                  ),
-                ),
-              );
-            }
-        }
-      },
-    );
-  }
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      this._scaffoldKey.currentState?.openDrawer();
+    });
 
-  Future<String> loadUpProvider() async {
-    Provider provider = _providerDetails.getProvider();
-    List<XCategory> liveXCategories = await XStreamUtils.getLiveCategories(provider);
-    this.liveXCategories = liveXCategories;
-    return Future.value("liveXCategories Loaded! (loadUpProvider) ProviderLiveCategoriesMenu/Page");
+    return Scaffold(
+      key: this._scaffoldKey,
+      drawer: NavigationDrawerMenu(
+          nameOfPage: "Live Categories!",
+          listView: this.providerDetails.getProvider().createDrawerListView(context, liveXCategories)),
+      backgroundColor: Colors.white70,
+      appBar: AppBar(
+        title: Text("Live Categories!"),
+      ),
+      body: SingleChildScrollView(
+        child: Column(children: [
+          // _providerDetails.getProvider().createWidgetsCategories(context, liveXCategories),
+        ]),
+      ),
+    );
   }
 }
