@@ -21,31 +21,47 @@ class ChooseProviderMenuPage extends State<ChooseProviderMenu> {
             if (snapshot.hasError)
               return Text('Error: ${snapshot.error}');
             else {
-              return Scaffold(
-                backgroundColor: Colors.white70,
-                appBar: AppBar(
-                  title: Text("Providers"),
-                  automaticallyImplyLeading: false,
+              return Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Colors.lightGreen, Colors.black45]),
                 ),
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () => {
-                    Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProvidersEditMenu()))
-                        .then((value) {
-                      setState(() {});
-                    })
-                  },
-                  child: Icon(Icons.settings),
-                ),
-                body: SingleChildScrollView(
-                  child: Column(children: [
-                    ProvidersMenuUtils.createProvidersWidget(
-                        context, false, true, () {
-                      setState(() {});
-                    }),
-                  ]),
+                child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  appBar: AppBar(
+                    backgroundColor: Colors.black45,
+                    title: Text("Providers"),
+                    automaticallyImplyLeading: false,
+                  ),
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () => {
+                      Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProvidersEditMenu()))
+                          .then((value) {
+                        setState(() {});
+                      })
+                    },
+                    child: Icon(Icons.settings),
+                  ),
+                  body: SingleChildScrollView(
+                    child: Column(
+                        children: [
+                          Text("CCIPTVVideoPlayer",
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),),
+                      ProvidersMenuUtils.createProvidersWidget(
+                          context, false, () {
+                        setState(() {});
+                      }),
+                    ]),
+                  ),
                 ),
               );
             }

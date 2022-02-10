@@ -39,7 +39,7 @@ class ProvidersEditMenuPage extends State<ProvidersEditMenu> {
               : SingleChildScrollView(
                   child: Column(children: [
                     ProvidersMenuUtils.createProvidersWidget(
-                        context, true, false, () => {setState(() {})}),
+                        context, true, () => {setState(() {})}),
                   ]),
                 )),
     );

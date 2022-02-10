@@ -30,7 +30,7 @@ class ProvidersMenuUtils {
   }
 
   static ListView createProvidersWidget(
-      BuildContext context, bool editMode, bool center, Function setTheState) {
+      BuildContext context, bool editMode, Function setTheState) {
     return ListView.builder(
         shrinkWrap: true,
         itemCount: ProvidersUtils.providersDetailsMap.keys.length,
@@ -41,13 +41,9 @@ class ProvidersMenuUtils {
           return Padding(
             padding: EdgeInsets.only(bottom: 10),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                center
-                    ? Expanded(
-                        child: Center(
-                        child: _theSizedBox(context, providerDetails),
-                      ))
-                    : _theSizedBox(context, providerDetails),
+                _theSizedBox(context, providerDetails),
 
                 if (editMode) SizedBox(width: 20),
                 //Edit button
