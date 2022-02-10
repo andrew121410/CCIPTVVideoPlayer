@@ -33,20 +33,33 @@ class Provider {
       BuildContext context, List<XChannel> xChannels) {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-          childAspectRatio: 7, mainAxisSpacing: 8, crossAxisSpacing: 8,
+        crossAxisCount: 4,
+          childAspectRatio: 3, mainAxisSpacing: 8, crossAxisSpacing: 8,
       ),
         shrinkWrap: true,
         itemCount: xChannels.length,
         itemBuilder: (BuildContext context, int index) {
           XChannel xChannel = xChannels[index];
 
-          return ElevatedButton(
-            onPressed: () {},
-            child: Text(xChannel.name),
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-            ),
+          return     GestureDetector(
+              child: Container(
+                  // width:120,
+                  // height: 40,
+                  decoration: BoxDecoration(
+                      color: Colors.black,
+                      image: DecorationImage(
+                          image: NetworkImage(xChannel.streamIcon),
+                          fit:BoxFit.scaleDown,
+                      )),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Text(xChannel.name, style: TextStyle(
+                          color: Colors.white,
+                        ),),
+                      ) // button text
+              ),onTap:(){
+            print("you clicked me");
+          }
           );
         });
   }

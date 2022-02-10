@@ -50,12 +50,14 @@ class ChooseProviderMenuPage extends State<ChooseProviderMenu> {
                   body: SingleChildScrollView(
                     child: Column(
                         children: [
+                          Padding(padding: EdgeInsets.only(bottom: 50)),
                           Text("CCIPTVVideoPlayer",
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.red,
                             fontWeight: FontWeight.bold,
                           ),),
+                      Padding(padding: EdgeInsets.only(bottom: 50)),
                       ProvidersMenuUtils.createProvidersWidget(
                           context, false, () {
                         setState(() {});

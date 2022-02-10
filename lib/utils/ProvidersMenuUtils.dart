@@ -35,8 +35,7 @@ class ProvidersMenuUtils {
         shrinkWrap: true,
         itemCount: ProvidersUtils.providersDetailsMap.keys.length,
         itemBuilder: (BuildContext context, int index) {
-          ProviderDetails providerDetails =
-              ProvidersUtils.providersDetailsMap.values.elementAt(index);
+          ProviderDetails providerDetails = ProvidersUtils.providersDetailsMap.values.elementAt(index);
 
           return Padding(
             padding: EdgeInsets.only(bottom: 10),
